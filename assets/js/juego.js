@@ -13,7 +13,7 @@ let flecha;
 let teclaPresionada;
 let ganador = 0;
 
-// do{
+do{
      document.onkeyup = (event) => {
         letraRandom = randomNumber(minimo, maximo);
         flechaRandom = randomNumber(minimo, maximo);
@@ -100,4 +100,4 @@ let ganador = 0;
                 break;
         }
     }
-// }while(ganador == 0);
+}while(ganador == 0);
