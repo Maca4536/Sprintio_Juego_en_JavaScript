@@ -1,0 +1,47 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+main{
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 1fr 2fr 2fr 1fr;
+    gap: 1vw;
+}
+
+#div_letra{
+    grid-row: 1/2;
+}
+
+#div_PJ1{
+    grid-row: 2/3;
+}
+
+#div_PJ2{
+    grid-row: 3/4;
+}
+
+#div_flecha{
+    grid-row: 4/5;
+}
+
+#div_letra, #div_PJ1, #div_PJ2, #div_flecha{
+    display: grid;
+    align-items: center;
+    background-color: brown;
+}
+
+#letra, #PJ1, #PJ2, #flecha{
+    width: 5vw;
+    height: 5vw;
+    background-color: aqua;
+}
+
+#letra, #flecha{
+    justify-self: center;
+}
+
+#PJ1, #PJ2{
+    margin: 1vw;
+}
