@@ -1,6 +1,7 @@
 *{
     padding: 0;
     margin: 0;
+    font-family: 'Quantico', sans-serif;
 }
 
 main{
@@ -16,10 +17,12 @@ main{
 
 #div_PJ1{
     grid-row: 2/3;
+    grid-template-columns: repeat(10, 1fr);
 }
 
 #div_PJ2{
     grid-row: 3/4;
+    grid-template-columns: repeat(10, 1fr);
 }
 
 #div_flecha{
@@ -38,10 +41,10 @@ main{
     background-color: aqua;
 }
 
-#letra, #flecha{
+#PJ1, #PJ2, #letra, #flecha{
     justify-self: center;
 }
 
-#PJ1, #PJ2{
-    margin: 1vw;
+#PJ2{
+    grid-column: 1/2;
 }
