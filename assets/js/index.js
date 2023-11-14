@@ -1,3 +1,5 @@
+/*** Declaración de variables ***/
+
 const btnLeft = document.getElementById("btn-left");
 const btnRight = document.getElementById("btn-right");
 const slider = document.getElementById("slider");
@@ -5,23 +7,11 @@ const sliderSection = document.querySelectorAll(".slider-section");
 let contenedor_carrusel = document.getElementById("contenedor-carrusel");
 let como_jugar = document.getElementById("como_jugar");
 let aceptar = document.querySelectorAll(".aceptar");
-
 let operacion = 0;
 let widthImg = 100 / sliderSection.length;
 let posicion = 0;
 
-window.onload = () => {
-    document.querySelector("main").removeChild(contenedor_carrusel);
-}
-
-como_jugar.onclick = () => {
-    document.querySelector("main").appendChild(contenedor_carrusel);
-    if(posicion == sliderSection.length - sliderSection.length){
-        btnLeft.className = "deshabilitado";
-    }
-
-    document.getElementById("grid").className = "deshabilitado";
-}
+/*** Fumciones de las flechas ***/
 
 const moveToLeft = () => {
     operacion -= widthImg;
@@ -44,8 +34,22 @@ const moveToRight = () => {
 
     if(posicion == sliderSection.length - 1){
         btnRight.className = "deshabilitado";
-        console.log("Deshabilitado");
     }
+}
+
+/*** Alerta Carrusel ***/
+
+window.onload = () => {
+    contenedor_carrusel.remove();
+}
+
+como_jugar.onclick = () => {
+    document.querySelector("main").appendChild(contenedor_carrusel);
+    if(posicion == sliderSection.length - sliderSection.length){
+        btnLeft.className = "deshabilitado";
+    }
+
+    document.getElementById("grid").className = "deshabilitado";
 }
 
 btnLeft.onclick = (e) => {
@@ -58,7 +62,7 @@ btnRight.onclick = (e) => {
 
 aceptar.forEach(boton => {
     boton.onclick = () => {
-        document.querySelector("main").removeChild(contenedor_carrusel);
+        contenedor_carrusel.remove();
         document.getElementById("grid").className = "";
     }
 });

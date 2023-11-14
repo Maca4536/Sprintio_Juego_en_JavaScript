@@ -5,45 +5,59 @@ const randomNumber = (min, max) => {
 };
 
 
+/*** Función: Timer (Juego) ***/
+
+const timer = () => {
+    div_timer.innerText = tiempo;
+    tiempo--;
+
+    if(div_timer.innerText == 1){
+        setTimeout(() => {
+            div_timer.innerText = "¡YA!";
+            setTimeout(() => {
+                div_fondo.remove();
+                div_tecla.forEach(img => {
+                    document.querySelector("main").appendChild(img);
+                });
+                juego();
+            }, 1000);
+        }, 1000);
+    }
+}
+
+let intervalo = setInterval(() => {
+    timer();
+
+    if(tiempo == 0){
+        clearInterval(intervalo);
+    }
+}, 1000);
+
+
 /*** Función: Evaluar letra ***/
 
 const evaluarLetra = (letraFun, letraRandomFun) => {
     if(posicion1 < 10){
         if(letraFun == letraRandomFun){
-            console.log("Letra correcta.");
-            console.log("-----------------");
-    
             posicion1 += 1;
-            console.log(posicion2);
             pj1.style.gridColumn = posicion1 + "/" + (posicion1 + 1);
-            console.log(pj1.style.gridColumn = posicion1 + "/" + (posicion1 + 1));
-            console.log(posicion1);
     
             if(posicion1 < 10){
                 letraRandomFun = randomNumber(minimo, maximo);
-                console.log(`Letra generada: ${letraRandomFun}`);
-                console.log("-----------------");
+                imagenLetra(letraRandomFun);
             }
 
             return letraRandomFun;
         }
     
         else{
-            console.log("Letra incorrecta.");
-            console.log("-----------------");
-    
             if(posicion1 != 1){
                 posicion1 -= 1;
-                console.log(posicion2);
                 pj1.style.gridColumn = posicion1 + "/" + (posicion1 + 1);
             }
             
-            console.log(pj1.style.gridColumn = posicion1 + "/" + (posicion1 + 1));
-            console.log(posicion1);
-    
             letraRandomFun = randomNumber(minimo, maximo);
-            console.log(`Letra generada: ${letraRandomFun}`);
-            console.log("-----------------");
+            imagenLetra(letraRandomFun);
 
             return letraRandomFun;
         }
@@ -57,39 +71,25 @@ const evaluarLetra = (letraFun, letraRandomFun) => {
 const evaluarFlecha = (flechaFun, flechaRandomFun) => {
     if(posicion2 < 10){
         if(flechaFun == flechaRandomFun){
-            console.log("Flecha correcta.");
-            console.log("-----------------");
-    
             posicion2 += 1;
-            console.log(posicion2);
             pj2.style.gridColumn = posicion2 + "/" + (posicion2 + 1);
-            console.log(pj2.style.gridColumn = posicion2 + "/" + (posicion2 + 1));
-            console.log(posicion2);
     
             if(posicion2 < 10){
                 flechaRandomFun = randomNumber(minimo, maximo);
-                console.log(`Flecha generada: ${flechaRandomFun}`);
-                console.log("-----------------");
+                imagenFlecha(flechaRandomFun);
             }
             
             return flechaRandomFun;
         }
     
         else{
-            console.log("Flecha incorrecta.");
-            console.log("-----------------");
-            
             if(posicion2 != 1){
                 posicion2 -= 1;
-                pj2.style.gridColumn = posicion2 + "/" + posicion2 + 1;
+                pj2.style.gridColumn = posicion2 + "/" + (posicion2 + 1);
             }
     
-            console.log(pj2.style.gridColumn = posicion2 + "/" + (posicion2 + 1));
-            console.log(posicion2);
-    
             flechaRandomFun = randomNumber(minimo, maximo);
-            console.log(`Flecha generada: ${flechaRandomFun}`);
-            console.log("-----------------");
+            imagenFlecha(flechaRandomFun);
             
             return flechaRandomFun;
         }
@@ -101,12 +101,13 @@ const evaluarFlecha = (flechaFun, flechaRandomFun) => {
 
 const evaluarGanador = () => {
     if(posicion1 == 10 || posicion2 == 10){
+        document.onkeyup = null;
+        
         if(posicion1 == 10){
              setTimeout(()=>{
                 Swal.fire({
                     allowOutsideClick: false,
                     allowEscapeKey: false,
-                    /* iconHtml: "https://cdn-icons-png.flaticon.com/512/1332/1332056.png", */
                     title: "Ganador: Jugador 1\n¡Felicidades!",
                     text: "¿Qué deseas hacer?",
                     showDenyButton: true,
@@ -147,97 +148,133 @@ const evaluarGanador = () => {
 }
 
 
+/*** Función: Imagen letra ***/
+
+const imagenLetra = (l) => {
+    switch(l){
+        case 0:
+            imgLetra.setAttribute("src", "./assets/img/LetraW.png");
+            break;
+        
+        case 1:
+            imgLetra.setAttribute("src", "./assets/img/LetraA.png");
+            break;
+        
+        case 2:
+            imgLetra.setAttribute("src", "./assets/img/LetraS.png");
+            break;
+        
+        case 3:
+            imgLetra.setAttribute("src", "./assets/img/LetraD.png");
+            break;
+    }
+}
+
+
+/*** Función: Imagen flecha ***/
+
+const imagenFlecha = (f) => {
+    switch(f){
+        case 0:
+            imgFlecha.setAttribute("src", "./assets/img/FlechaArriba.png");
+            break;
+        
+        case 1:
+            imgFlecha.setAttribute("src", "./assets/img/FlechaIzq.png");
+            break;
+        
+        case 2:
+            imgFlecha.setAttribute("src", "./assets/img/FlechaAbajo.png");
+            break;
+        
+        case 3:
+            imgFlecha.setAttribute("src", "./assets/img/FlechaDer.png");
+            break;
+    }
+}
+
+
 /*** Declaración de variables ***/
 
 const minimo = 0;
 const maximo = 4;
-let letraRandom = randomNumber(minimo, maximo);
-let flechaRandom = randomNumber(minimo, maximo);
+let letraRandom;
+let flechaRandom;
 let letra;
 let flecha;
 let teclaPresionada;
+let div_fondo = document.getElementById("fondo");
+let div_timer = document.getElementById("timer");
+let imgLetra = document.getElementById("letra");
+let imgFlecha = document.getElementById("flecha");
 let pj1 = document.getElementById("PJ1");
 let pj2 = document.getElementById("PJ2");
+let div_tecla = document.querySelectorAll(".tecla");
 let posicion1 = 1;
 let posicion2 = 1;
+let tiempo = 3;
 
 
-/*** Juego ***/
+/*** Sacar imágenes de telcas ***/
+div_tecla.forEach(img => {
+    img.remove();
+});
 
-console.log(`Letra generada: ${letraRandom}`);
-console.log("-----------------");
-console.log(`Flecha generada: ${flechaRandom}`);
-console.log("-----------------");
 
-document.onkeyup = (event) => {
-    teclaPresionada = event.key.toLowerCase();
+/*** Función: Juego ***/
 
-    switch (teclaPresionada){
-        case "w":
-            console.log(teclaPresionada);
-            letra = 0;
-            console.log(letra);
+const juego = () => {
+    letraRandom = randomNumber(minimo, maximo);
+    flechaRandom = randomNumber(minimo, maximo);
 
-            letraRandom = evaluarLetra(letra, letraRandom);
-            break;
-        
-        case "a":
-            console.log(teclaPresionada);
-            letra = 1;
-            console.log(letra);
+    imagenLetra(letraRandom);
+    imagenFlecha(flechaRandom);
 
-            letraRandom = evaluarLetra(letra, letraRandom);
-            break;
-        
-        case "s":
-            console.log(teclaPresionada);
-            letra = 2;
-            console.log(letra);
+    document.onkeyup = (event) => {
+        teclaPresionada = event.key.toLowerCase();
 
-            letraRandom = evaluarLetra(letra, letraRandom);
-            break;
-        
-        case "d":
-            console.log(teclaPresionada);
-            letra = 3;
-            console.log(letra);
+        switch(teclaPresionada){
+            case "w":
+                letra = 0;
+                letraRandom = evaluarLetra(letra, letraRandom);
+                break;
+            
+            case "a":
+                letra = 1;
+                letraRandom = evaluarLetra(letra, letraRandom);
+                break;
+            
+            case "s":
+                letra = 2;
+                letraRandom = evaluarLetra(letra, letraRandom);
+                break;
+            
+            case "d":
+                letra = 3;
+                letraRandom = evaluarLetra(letra, letraRandom);
+                break;
+            
+            case "arrowup":
+                flecha = 0;
+                flechaRandom = evaluarFlecha(flecha, flechaRandom);
+                break;
+            
+            case "arrowleft":
+                flecha = 1;
+                flechaRandom = evaluarFlecha(flecha, flechaRandom);
+                break;
+            
+            case "arrowdown":
+                flecha = 2;
+                flechaRandom = evaluarFlecha(flecha, flechaRandom);
+                break;
+            
+            case "arrowright":
+                flecha = 3;
+                flechaRandom = evaluarFlecha(flecha, flechaRandom);
+                break;
+        }
 
-            letraRandom = evaluarLetra(letra, letraRandom);
-            break;
-        
-        case "arrowup":
-            console.log(teclaPresionada);
-            flecha = 0;
-            console.log(flecha);
-
-            flechaRandom = evaluarFlecha(flecha, flechaRandom);
-            break;
-        
-        case "arrowleft":
-            console.log(teclaPresionada);
-            flecha = 1;
-            console.log(flecha);
-        
-            flechaRandom = evaluarFlecha(flecha, flechaRandom);
-            break;
-        
-        case "arrowdown":
-            console.log(teclaPresionada);
-            flecha = 2;
-            console.log(flecha);
-        
-            flechaRandom = evaluarFlecha(flecha, flechaRandom);
-            break;
-        
-        case "arrowright":
-            console.log(teclaPresionada);
-            flecha = 3;
-            console.log(flecha);
-        
-            flechaRandom = evaluarFlecha(flecha, flechaRandom);
-            break;
+        evaluarGanador();
     }
-
-    evaluarGanador();
-
 }
